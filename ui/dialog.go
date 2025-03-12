@@ -12,6 +12,7 @@ type Dialog struct {
 	width   int
 	height  int
 	styles  DialogStyles
+	keyMap  DialogKeyMap
 }
 
 // DialogStyles contains the styles for the dialog
@@ -55,6 +56,7 @@ func NewDialog(title, message string) *Dialog {
 		width:   60,
 		height:  7,
 		styles:  DefaultDialogStyles(),
+		keyMap:  DefaultDialogKeyMap(),
 	}
 }
 
