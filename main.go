@@ -2,25 +2,51 @@ package main
 
 import (
 	"fmt"
+	"os"
 
-	"github.com/cli/go-gh/v2/pkg/api"
+	"github.com/tnagatomi/gh-go-mod-browser/github"
+	"github.com/tnagatomi/gh-go-mod-browser/parser"
+	"github.com/tnagatomi/gh-go-mod-browser/ui"
 )
 
 func main() {
-	fmt.Println("hi world, this is the gh-go-mod-browser extension!")
-	client, err := api.DefaultRESTClient()
+	// Create a parser for the go.mod file in the current directory
+	gomodParser, err := parser.NewParserForCurrentDirectory()
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
 	}
-	response := struct {Login string}{}
-	err = client.Get("user", &response)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Printf("running as %s\n", response.Login)
-}
 
-// For more examples of using go-gh, see:
-// https://github.com/cli/go-gh/blob/trunk/example_gh_test.go
+	// Extract direct dependencies
+	packages, err := gomodParser.Parse()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	if len(packages) == 0 {
+		fmt.Println("No direct dependencies found in go.mod file.")
+		os.Exit(0)
+	}
+
+	// Initialize GitHub client
+	githubClient, err := github.NewClient()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Check starred status
+	err = githubClient.CheckStarredStatus(packages)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Run TUI application
+	err = ui.Run(packages, githubClient)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+}
