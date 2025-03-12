@@ -8,6 +8,14 @@ import (
 	"github.com/tnagatomi/gh-go-mod-browser/model"
 )
 
+// GitHubClient defines the interface for GitHub operations
+type GitHubClient interface {
+	CheckStarredStatus(packages []*model.Package) error
+	StarRepository(pkg *model.Package) error
+	UnstarRepository(pkg *model.Package) error
+	StarAllUnstarred(packages []*model.Package) (int, error)
+}
+
 // Client handles GitHub API operations
 type Client struct {
 	restClient* api.RESTClient

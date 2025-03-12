@@ -29,7 +29,7 @@ type App struct {
 	list         *PackageList
 	details      *PackageDetails
 	state        State
-	githubClient *github.Client
+	githubClient github.GitHubClient
 	dialog       *Dialog
 	err          error
 	width        int
@@ -37,7 +37,7 @@ type App struct {
 }
 
 // NewApp creates a new TUI application
-func NewApp(packages []*model.Package, githubClient *github.Client) *App {
+func NewApp(packages []*model.Package, githubClient github.GitHubClient) *App {
 	list := NewPackageList(packages)
 	details := NewPackageDetails()
 
