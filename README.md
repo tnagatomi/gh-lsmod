@@ -2,6 +2,8 @@
 
 `gh-go-mod-browser` is a gh extension which allow you to browse a project go.mod's direct dependent packages.
 
+![demo](https://github.com/user-attachments/assets/ceb8fcf0-c6e1-487a-bf4c-1fcfe37b076e)
+
 ## Installation
 
 Install as a gh extension [GitHub CLI extensions](https://cli.github.com/manual/gh_extension)
