@@ -20,8 +20,8 @@ func NewGoModParser(filePath string) *GoModParser {
 	}
 }
 
-// ParseCurrentDirectory parses the go.mod file in the current directory
-func ParseCurrentDirectory() (*GoModParser, error) {
+// NewParserForCurrentDirectory creates a new GoModParser for the go.mod file in the current directory
+func NewParserForCurrentDirectory() (*GoModParser, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, err
