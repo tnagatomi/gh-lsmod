@@ -18,7 +18,7 @@ type GitHubClient interface {
 
 // Client handles GitHub API operations
 type Client struct {
-	restClient* api.RESTClient
+	restClient *api.RESTClient
 }
 
 // NewClient creates a new GitHub client
@@ -124,10 +124,10 @@ func (c *Client) checkStarred(repoPath string) (int, error) {
 
 	resp, err := c.restClient.Request("GET", path, nil)
 	if err != nil {
-		// 404 is expected if the repository is not starred
-		if resp != nil && resp.StatusCode == 404 {
+		if strings.Contains(err.Error(), "404") {
 			return 404, nil
 		}
+		
 		return 0, err
 	}
 	defer resp.Body.Close()
