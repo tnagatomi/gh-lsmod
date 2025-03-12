@@ -67,7 +67,11 @@ func (p *Package) PkgGoDevURL() string {
 }
 
 // StarSymbol returns the star symbol based on the starred status
+// Returns empty string if not a GitHub repository
 func (p *Package) StarSymbol() string {
+	if !p.IsGitHub {
+		return ""
+	}
 	if p.IsStarred {
 		return "★"
 	}
@@ -76,5 +80,9 @@ func (p *Package) StarSymbol() string {
 
 // String returns a string representation of the package
 func (p *Package) String() string {
-	return fmt.Sprintf("%s %s", p.StarSymbol(), p.Path)
+	symbol := p.StarSymbol()
+	if symbol == "" {
+		return fmt.Sprintf("  %s", p.Path) // Add space for alignment
+	}
+	return fmt.Sprintf("%s %s", symbol, p.Path)
 }
