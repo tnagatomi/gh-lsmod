@@ -31,7 +31,6 @@ type App struct {
 	state        State
 	githubClient github.GitHubClient
 	dialog       *Dialog
-	err          error
 	width        int
 	height       int
 }
