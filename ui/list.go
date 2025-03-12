@@ -1,6 +1,9 @@
 package ui
 
 import (
+	"strings"
+
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -38,6 +41,9 @@ type PackageList struct {
 	list     list.Model
 	packages []*model.Package
 	keyMap   PackageListKeyMap
+	help     help.Model
+	width    int
+	height   int
 }
 
 // PackageListKeyMap defines the key bindings for the package list
@@ -46,6 +52,7 @@ type PackageListKeyMap struct {
 	OpenPkgGoDev key.Binding
 	ToggleStar   key.Binding
 	StarAll      key.Binding
+	Quit         key.Binding
 }
 
 // DefaultPackageListKeyMap returns the default key bindings for the package list
@@ -67,6 +74,24 @@ func DefaultPackageListKeyMap() PackageListKeyMap {
 			key.WithKeys("S"),
 			key.WithHelp("S", "star all"),
 		),
+		Quit: key.NewBinding(
+			key.WithKeys("q", "ctrl+c"),
+			key.WithHelp("q", "quit"),
+		),
+	}
+}
+
+// ShortHelp returns keybindings to be shown in the mini help view.
+func (k PackageListKeyMap) ShortHelp() []key.Binding {
+	return []key.Binding{k.OpenGitHub, k.OpenPkgGoDev, k.ToggleStar, k.StarAll, k.Quit}
+}
+
+// FullHelp returns keybindings for the expanded help view.
+func (k PackageListKeyMap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{k.OpenGitHub, k.OpenPkgGoDev},
+		{k.ToggleStar, k.StarAll},
+		{k.Quit},
 	}
 }
 
@@ -89,10 +114,14 @@ func NewPackageList(packages []*model.Package) *PackageList {
 		Bold(true).
 		MarginLeft(2)
 
+	keyMap := DefaultPackageListKeyMap()
+	helpModel := help.New()
+
 	return &PackageList{
 		list:     l,
 		packages: packages,
-		keyMap:   DefaultPackageListKeyMap(),
+		keyMap:   keyMap,
+		help:     helpModel,
 	}
 }
 
@@ -104,13 +133,31 @@ func (l *PackageList) Init() tea.Cmd {
 // Update handles user input and updates the package list
 func (l *PackageList) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
+
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		l.width = msg.Width
+		l.height = msg.Height
+		l.help.Width = msg.Width
+		l.SetSize(msg.Width, msg.Height-4) // Reserve space for help
+	}
+
 	l.list, cmd = l.list.Update(msg)
 	return l, cmd
 }
 
 // View renders the package list
 func (l *PackageList) View() string {
-	return l.list.View()
+	// Render the list view
+	listView := l.list.View()
+
+	// Render the help view
+	helpView := l.help.View(l.keyMap)
+
+	// Calculate appropriate spacing
+	height := 2 // Default spacing
+
+	return listView + strings.Repeat("\n", height) + helpView
 }
 
 // SelectedPackage returns the currently selected package
