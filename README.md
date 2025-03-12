@@ -6,7 +6,7 @@
 
 ## Installation
 
-Install as a gh extension [GitHub CLI extensions](https://cli.github.com/manual/gh_extension)
+Install as a [gh](https://cli.github.com/) extension ([GitHub CLI extensions](https://cli.github.com/manual/gh_extension))
 
 ```console
 gh extension install tnagatomi/gh-go-mod-browser
