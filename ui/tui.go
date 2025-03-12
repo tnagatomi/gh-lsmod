@@ -16,6 +16,13 @@ const (
 	StateDialog
 )
 
+// Layout constants
+const (
+	DetailViewHeight = 10
+	HelpViewHeight   = 3
+	MinListHeight    = 5
+)
+
 // App represents the TUI application
 type App struct {
 	packages     []*model.Package
@@ -33,11 +40,11 @@ type App struct {
 func NewApp(packages []*model.Package, githubClient *github.Client) *App {
 	list := NewPackageList(packages)
 	details := NewPackageDetails()
-	
+
 	if len(packages) > 0 {
 		details.SetPackage(packages[0])
 	}
-	
+
 	return &App{
 		packages:     packages,
 		list:         list,
@@ -57,41 +64,45 @@ func (a *App) Init() tea.Cmd {
 // Update handles user input and updates the application state
 func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-	
+
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		a.width = msg.Width
 		a.height = msg.Height
 		a.updateComponentSizes()
-		
+
 	case tea.KeyMsg:
 		switch {
-		case key.Matches(msg, key.NewBinding(key.WithKeys("q", "ctrl+c"))):
+		case key.Matches(msg, a.list.keyMap.Quit):
 			return a, tea.Quit
 		}
 	}
-	
+
 	switch a.state {
 	case StateList:
 		return a.updateList(msg)
 	case StateDialog:
 		return a.updateDialog(msg)
 	}
-	
+
 	return a, cmd
 }
 
 // updateComponentSizes updates the sizes of all components
 func (a *App) updateComponentSizes() {
-	listHeight := a.height - 15 // Reserve space for details
+	// Reserve space for details and help message
+	listHeight := a.height - DetailViewHeight - HelpViewHeight
+	if listHeight < MinListHeight {
+		listHeight = MinListHeight // Ensure minimum list height
+	}
 	a.list.SetSize(a.width, listHeight)
-	a.details.SetSize(a.width, 15)
+	a.details.SetSize(a.width, DetailViewHeight)
 }
 
 // updateList handles user input in the list view
 func (a *App) updateList(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-	
+
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
@@ -104,7 +115,7 @@ func (a *App) updateList(msg tea.Msg) (tea.Model, tea.Cmd) {
 					_ = browser.OpenURL(url)
 				}
 			}
-			
+
 		case key.Matches(msg, a.list.keyMap.OpenPkgGoDev):
 			// Open pkg.go.dev page in browser
 			pkg := a.list.SelectedPackage()
@@ -112,7 +123,7 @@ func (a *App) updateList(msg tea.Msg) (tea.Model, tea.Cmd) {
 				url := pkg.PkgGoDevURL()
 				_ = browser.OpenURL(url)
 			}
-			
+
 		case key.Matches(msg, a.list.keyMap.ToggleStar):
 			// Toggle star status
 			pkg := a.list.SelectedPackage()
@@ -123,7 +134,7 @@ func (a *App) updateList(msg tea.Msg) (tea.Model, tea.Cmd) {
 					_ = a.githubClient.StarRepository(pkg)
 				}
 			}
-			
+
 		case key.Matches(msg, a.list.keyMap.StarAll):
 			// Show confirmation dialog for starring all unstarred repositories
 			unstarredCount := 0
@@ -135,23 +146,23 @@ func (a *App) updateList(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if unstarredCount > 0 {
 				a.dialog = NewDialog(
 					"Star all unstarred GitHub repositories?",
-					"This will add stars to " + string(rune(unstarredCount)) + " repositories.",
+					"This will add stars to "+string(rune(unstarredCount))+" repositories.",
 				)
 				a.state = StateDialog
 				return a, nil
 			}
 		}
 	}
-	
+
 	// Update the list component
 	_, cmd = a.list.Update(msg)
-	
+
 	// Update the details component with the selected package
 	pkg := a.list.SelectedPackage()
 	if pkg != nil {
 		a.details.SetPackage(pkg)
 	}
-	
+
 	return a, cmd
 }
 
@@ -165,7 +176,7 @@ func (a *App) updateDialog(msg tea.Msg) (tea.Model, tea.Cmd) {
 			_, _ = a.githubClient.StarAllUnstarred(a.packages)
 			a.state = StateList
 			a.dialog = nil
-			
+
 		case key.Matches(msg, a.dialog.keyMap.Cancel):
 			// Cancel dialog
 			a.state = StateList

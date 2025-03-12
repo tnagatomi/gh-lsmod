@@ -139,7 +139,6 @@ func (l *PackageList) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		l.width = msg.Width
 		l.height = msg.Height
 		l.help.Width = msg.Width
-		l.SetSize(msg.Width, msg.Height-4) // Reserve space for help
 	}
 
 	l.list, cmd = l.list.Update(msg)
