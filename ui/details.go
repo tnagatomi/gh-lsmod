@@ -89,14 +89,14 @@ func (d *PackageDetails) View() string {
 	var content string
 
 	// Add the package name
-	content += d.styles.Label.Render("Name: ") + d.styles.Value.Render(d.pkg.Path) + "\n\n"
+	content += d.styles.Label.Render("Name: ") + d.styles.Value.Render(d.pkg.Path) + "\n"
 
 	// Add the package version
-	content += d.styles.Label.Render("Version: ") + d.styles.Value.Render(d.pkg.Version) + "\n\n"
+	content += d.styles.Label.Render("Version: ") + d.styles.Value.Render(d.pkg.Version) + "\n"
 
 	// Add the GitHub URL if it's a GitHub repository
 	if d.pkg.IsGitHub {
-		content += d.styles.Label.Render("GitHub: ") + d.styles.Value.Render(d.pkg.GitHubURL()) + "\n\n"
+		content += d.styles.Label.Render("GitHub: ") + d.styles.Value.Render(d.pkg.GitHubURL()) + "\n"
 	}
 
 	// Add the pkg.go.dev URL
