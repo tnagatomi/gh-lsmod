@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-go-mod-browser/size"
 	"golang.org/x/mod/modfile"
 )
 
@@ -47,6 +48,12 @@ func (p *GoModParser) Parse() ([]*model.Package, error) {
 	for _, req := range file.Require {
 		if !req.Indirect {
 			pkg := model.NewPackage(req.Mod.Path, req.Mod.Version)
+
+			pkgSize, err := size.CalculatePackageSize(pkg)
+			if err == nil {
+				pkg.Size = pkgSize
+			}
+
 			packages = append(packages, pkg)
 		}
 	}

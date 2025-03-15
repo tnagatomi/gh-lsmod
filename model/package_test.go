@@ -146,6 +146,50 @@ func TestStarSymbol(t *testing.T) {
 	}
 }
 
+func TestFormattedSize(t *testing.T) {
+	tests := []struct {
+		name     string
+		size     int64
+		expected string
+	}{
+		{
+			name:     "Zero size",
+			size:     0,
+			expected: "unknown",
+		},
+		{
+			name:     "Bytes",
+			size:     500,
+			expected: "500.00 B",
+		},
+		{
+			name:     "Kilobytes",
+			size:     1500,
+			expected: "1.46 KB",
+		},
+		{
+			name:     "Megabytes",
+			size:     1500000,
+			expected: "1.43 MB",
+		},
+		{
+			name:     "Gigabytes",
+			size:     1500000000,
+			expected: "1.40 GB",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pkg := NewPackage("test/package", "v1.0.0")
+			pkg.Size = tt.size
+			if got := pkg.FormattedSize(); got != tt.expected {
+				t.Errorf("FormattedSize() = %v, want %v", got, tt.expected)
+			}
+		})
+	}
+}
+
 func TestString(t *testing.T) {
 	tests := []struct {
 		name      string

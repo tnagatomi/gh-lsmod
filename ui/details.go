@@ -93,6 +93,9 @@ func (d *PackageDetails) View() string {
 
 	// Add the package version
 	content += d.styles.Label.Render("Version: ") + d.styles.Value.Render(d.pkg.Version) + "\n"
+	
+	// Add the package size
+	content += d.styles.Label.Render("Size: ") + d.styles.Value.Render(d.pkg.FormattedSize()) + "\n"
 
 	// Add the GitHub URL if it's a GitHub repository
 	if d.pkg.IsGitHub {

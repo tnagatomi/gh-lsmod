@@ -11,6 +11,7 @@ type Package struct {
 	Version   string // Version
 	IsGitHub  bool   // Whether it's a GitHub repository
 	IsStarred bool   // Whether it's starred by the user
+	Size      int64  // Size in bytes
 }
 
 // NewPackage creates a new Package instance
@@ -20,6 +21,7 @@ func NewPackage(path, version string) *Package {
 		Version:   version,
 		IsGitHub:  strings.HasPrefix(path, "github.com/"),
 		IsStarred: false,
+		Size:      0,
 	}
 }
 
@@ -76,6 +78,42 @@ func (p *Package) StarSymbol() string {
 		return "★"
 	}
 	return "☆"
+}
+
+// FormattedSize returns the size in a human-readable format
+func (p *Package) FormattedSize() string {
+	if p.Size == 0 {
+		return "unknown"
+	}
+
+	const (
+		_          = iota
+		KB float64 = 1 << (10 * iota)
+		MB
+		GB
+	)
+
+	var (
+		value float64
+		unit  string
+	)
+
+	switch {
+	case p.Size >= int64(GB):
+		value = float64(p.Size) / GB
+		unit = "GB"
+	case p.Size >= int64(MB):
+		value = float64(p.Size) / MB
+		unit = "MB"
+	case p.Size >= int64(KB):
+		value = float64(p.Size) / KB
+		unit = "KB"
+	default:
+		value = float64(p.Size)
+		unit = "B"
+	}
+
+	return fmt.Sprintf("%.2f %s", value, unit)
 }
 
 // String returns a string representation of the package
