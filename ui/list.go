@@ -28,11 +28,15 @@ func (i PackageItem) Title() string {
 
 // Description returns the description of the item
 func (i PackageItem) Description() string {
-	desc := ""
+	desc := "[pkg.go]"
+
 	if i.pkg.IsGitHub {
-		desc += "[GitHub] "
+		desc += " [GitHub]"
 	}
-	desc += "[pkg.go]"
+	
+	// Add size information
+	desc += " (" + i.pkg.FormattedSize() + ")"
+	
 	return desc
 }
 

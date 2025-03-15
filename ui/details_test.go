@@ -36,24 +36,44 @@ func TestPackageDetailsView(t *testing.T) {
 		},
 		{
 			name: "GitHub package",
-			pkg:  model.NewPackage("github.com/charmbracelet/bubbles", " v0.20.0"),
+			pkg:  func() *model.Package {
+				pkg := model.NewPackage("github.com/charmbracelet/bubbles", " v0.20.0")
+				pkg.Size = 1024 * 1024 // 1MB
+				return pkg
+			}(),
 			contains: []string{
 				"Name: github.com/charmbracelet/bubbles",
 				"Version:  v0.20.0",
+				"Size: 1.00 MB",
 				"GitHub: https://github.com/charmbracelet/bubbles",
 				"pkg.go.dev: https://pkg.go.dev/github.com/charmbracelet/bubbles",
 			},
 		},
 		{
-			name: "Non-GitHub package",
+			name: "GitHub package with unknown size",
 			pkg:  model.NewPackage("golang.org/x/mod", "v1.0.0"),
 			contains: []string{
 				"Name: golang.org/x/mod",
 				"Version: v1.0.0",
+				"Size: unknown",
 				"pkg.go.dev: https://pkg.go.dev/golang.org/x/mod",
 			},
 		},
-	}
+		{
+			name: "Non-GitHub package",
+			pkg:  func() *model.Package {
+				pkg := model.NewPackage("golang.org/x/mod", "v1.0.0")
+				pkg.Size = 1024 // 1KB
+				return pkg
+			}(),
+			contains: []string{
+				"Name: golang.org/x/mod",
+				"Version: v1.0.0",
+				"Size: 1.00 KB",
+				"pkg.go.dev: https://pkg.go.dev/golang.org/x/mod",
+			},
+		},
+}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

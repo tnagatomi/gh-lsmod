@@ -62,25 +62,42 @@ func TestPackageItemTitle(t *testing.T) {
 func TestPackageItemDescription(t *testing.T) {
 	tests := []struct {
 		name     string
-		path     string
+		pkg      *model.Package
 		expected string
 	}{
 		{
-			name:     "GitHub package",
-			path:     "github.com/charmbracelet/bubbles",
-			expected: "[GitHub] [pkg.go]",
+			name: "GitHub package",
+			pkg: func() *model.Package {
+				pkg := model.NewPackage("github.com/charmbracelet/bubbles", "v1.0.0")
+				pkg.Size = 1024 * 1024 // 1MB
+				return pkg
+			}(),
+			expected: "[pkg.go] [GitHub] (1.00 MB)",
 		},
 		{
-			name:     "Non-GitHub package",
-			path:     "golang.org/x/mod",
-			expected: "[pkg.go]",
+			name: "GitHub package with unknown size",
+			pkg:  model.NewPackage("github.com/charmbracelet/bubbles", "v1.0.0"),
+			expected: "[pkg.go] [GitHub] (unknown)",
+		},
+		{
+			name: "Non-GitHub package",
+			pkg: func() *model.Package {
+				pkg := model.NewPackage("golang.org/x/mod", "v1.0.0")
+				pkg.Size = 1024 // 1KB
+				return pkg
+			}(),
+			expected: "[pkg.go] (1.00 KB)",
+		},
+		{
+			name: "Non-GitHub package with unknown size",
+			pkg:  model.NewPackage("golang.org/x/mod", "v1.0.0"),
+			expected: "[pkg.go] (unknown)",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pkg := model.NewPackage(tt.path, "v1.0.0")
-			item := PackageItem{pkg: pkg}
+			item := PackageItem{pkg: tt.pkg}
 
 			if got := item.Description(); got != tt.expected {
 				t.Errorf("Description() = %v, want %v", got, tt.expected)
