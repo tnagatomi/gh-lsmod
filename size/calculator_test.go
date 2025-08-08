@@ -20,7 +20,9 @@ func TestCalculatePackageSize(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create temp directory: %v", err)
 	}
-	defer os.RemoveAll(tempDir)
+	defer func() {
+		_ = os.RemoveAll(tempDir)
+	}()
 
 	os.Setenv("GOMODCACHE", tempDir)
 	os.Setenv("GOPATH", "")
