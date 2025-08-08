@@ -12,18 +12,20 @@ func TestCalculatePackageSize(t *testing.T) {
 	originalGOMODCACHE := os.Getenv("GOMODCACHE")
 	originalGOPATH := os.Getenv("GOPATH")
 	defer func() {
-		os.Setenv("GOMODCACHE", originalGOMODCACHE)
-		os.Setenv("GOPATH", originalGOPATH)
+		_ = os.Setenv("GOMODCACHE", originalGOMODCACHE)
+		_ = os.Setenv("GOPATH", originalGOPATH)
 	}()
 
 	tempDir, err := os.MkdirTemp("", "gomod-test")
 	if err != nil {
 		t.Fatalf("Failed to create temp directory: %v", err)
 	}
-	defer os.RemoveAll(tempDir)
+	defer func() {
+		_ = os.RemoveAll(tempDir)
+	}()
 
-	os.Setenv("GOMODCACHE", tempDir)
-	os.Setenv("GOPATH", "")
+	_ = os.Setenv("GOMODCACHE", tempDir)
+	_ = os.Setenv("GOPATH", "")
 
 	testCases := []struct {
 		name          string

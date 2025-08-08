@@ -127,10 +127,12 @@ func (c *Client) checkStarred(repoPath string) (int, error) {
 		if strings.Contains(err.Error(), "404") {
 			return 404, nil
 		}
-		
+
 		return 0, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	return resp.StatusCode, nil
 }
@@ -149,7 +151,9 @@ func (c *Client) putStar(repoPath string) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	return nil
 }
@@ -168,7 +172,9 @@ func (c *Client) deleteStar(repoPath string) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	return nil
 }
