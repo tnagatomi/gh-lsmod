@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 func TestPackageDetailsSetSize(t *testing.T) {

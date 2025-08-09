@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 func TestCalculatePackageSize(t *testing.T) {

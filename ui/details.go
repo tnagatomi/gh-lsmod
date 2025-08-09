@@ -3,7 +3,7 @@ package ui
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 // PackageDetails represents the details view of a package

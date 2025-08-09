@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 // CalculatePackageSize calculates the size of a package
 func CalculatePackageSize(pkg *model.Package) (int64, error) {

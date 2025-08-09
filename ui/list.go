@@ -8,7 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 // PackageItem represents a package in the list

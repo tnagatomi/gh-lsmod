@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 func TestParse(t *testing.T) {
@@ -19,7 +19,7 @@ func TestParse(t *testing.T) {
 	}()
 
 	// Create a test go.mod file
-	goModContent := `module github.com/tnagatomi/gh-go-mod-browser
+	goModContent := `module github.com/tnagatomi/gh-lsmod
 
 go 1.24.1
 
