@@ -3,7 +3,7 @@ module github.com/tnagatomi/gh-go-mod-browser
 go 1.24.1
 
 require (
-	github.com/charmbracelet/bubbles v0.20.0
+	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.6
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250319133953-166f707985bc
 	github.com/cli/browser v1.3.0
