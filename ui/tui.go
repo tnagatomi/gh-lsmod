@@ -4,8 +4,8 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/cli/browser"
-	"github.com/tnagatomi/gh-go-mod-browser/github"
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/github"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 // State represents the current state of the TUI

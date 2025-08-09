@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tnagatomi/gh-go-mod-browser/github"
-	"github.com/tnagatomi/gh-go-mod-browser/parser"
-	"github.com/tnagatomi/gh-go-mod-browser/ui"
+	"github.com/tnagatomi/gh-lsmod/github"
+	"github.com/tnagatomi/gh-lsmod/parser"
+	"github.com/tnagatomi/gh-lsmod/ui"
 )
 
 func main() {

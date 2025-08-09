@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tnagatomi/gh-go-mod-browser/model"
-	"github.com/tnagatomi/gh-go-mod-browser/size"
+	"github.com/tnagatomi/gh-lsmod/model"
+	"github.com/tnagatomi/gh-lsmod/size"
 	"golang.org/x/mod/modfile"
 )
 

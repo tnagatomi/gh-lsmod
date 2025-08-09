@@ -11,7 +11,7 @@ Set Shell zsh
 Set Padding 20
 
 # Demo
-Type "gh go-mod-browser"
+Type "gh lsmod"
 Sleep 2s
 Enter
 Sleep 3s
@@ -47,5 +47,5 @@ Type "q"
 Sleep 1s
 
 # Show final message
-Type "That's how gh-go-mod-browser works! 🚀"
+Type "That's how gh-lsmod works! 🚀"
 Sleep 2s

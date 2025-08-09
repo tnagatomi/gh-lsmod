@@ -1,4 +1,4 @@
-module github.com/tnagatomi/gh-go-mod-browser
+module github.com/tnagatomi/gh-lsmod
 
 go 1.24.1
 

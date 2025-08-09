@@ -3,7 +3,7 @@ package ui
 import (
 	"testing"
 
-	"github.com/tnagatomi/gh-go-mod-browser/model"
+	"github.com/tnagatomi/gh-lsmod/model"
 )
 
 func TestPackageItemFilterValue(t *testing.T) {
