@@ -2,7 +2,7 @@
 
 `gh-lsmod` is a gh extension which allow you to browse a project go.mod's direct dependent packages.
 
-![demo](https://github.com/user-attachments/assets/8535d39f-95b4-464c-99d9-c985e177bde8)
+![demo](https://github.com/user-attachments/assets/3356617b-28cf-41f7-b6d2-dff0be29b368)
 
 ## Installation
 
